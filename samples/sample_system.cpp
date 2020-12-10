@@ -12,11 +12,30 @@
 
 void main()
 {
-  
-    setlocale(0, "");
-    cout << "¬ведите количество тактов " << endl;
-    int s;
-    cin >> s;
-   
+	setlocale(0, "");
+	cout << "¬веди полином " << endl;
+	string st;
+	cin >> st;
+	Polinom a(st);
+	cout << a.Getpolinom() << endl;
+	Polinom b = a;
+	cout << b.Getpolinom() << endl;
+	Polinom c(a);
+	cout << " c=a " << endl;
+	cout << "c = ";
+
+	cout << c.Getpolinom() << endl;
+	cout << " c= a + b " << endl;
+	c = a + b;
+	cout << "c = ";
+	cout << c.Getpolinom() << endl;
+	cout << " c= a - b " << endl;
+	c = a - b;
+	cout << "c = ";
+	cout << c.Getpolinom() << endl;
+	cout << " c= a * b " << endl;
+	c = a * b;
+	cout << "c = ";
+	cout << c.Getpolinom() << endl;
 }
 //---------------------------------------------------------------------------

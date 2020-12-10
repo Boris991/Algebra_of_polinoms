@@ -21,9 +21,11 @@ public:
             for (int i = 0; i < k; i++)
             {
                 string s = w[i];
-                sp.AddMonom(s);
+                Monom A(s,10);
+                sp.AddMonom(A);
             }
         }
+
     }
     ~Polinom() {};
     Polinom(const Polinom& tmp)
@@ -68,5 +70,42 @@ public:
     {
         return sp.Getpolinom(Maxst);
     }
-    void StringToWord(string str, string* w, int& k);
+    void StringToWord(string str, string* w, int& k)
+    {
+        string zn = "+- ";
+        k = 0;
+        w[0] = "";
+        for (int i = 0; i < str.length(); i++)
+        {
+            int l = zn.find(str[i]);
+
+            if (l < 0)
+            {
+                w[k] += str[i];
+                if (i == str.length() - 1)
+                {
+                    k++;
+                }
+            }
+            else
+            {
+                if (str[i] == ' ')
+                {
+                    if (w[k] != "")
+                    {
+                        w[++k] = "";
+                    }
+                }
+                else
+                {
+                    if (w[k] != "")
+                    {
+                        k++;
+                    }
+                    w[k] = str[i];
+                    //w[++k] = "";
+                }
+            }
+        }
+    }
 };

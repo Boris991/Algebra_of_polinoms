@@ -1,306 +1,114 @@
 #include "Polinom.h"
 
 #include <gtest.h>
-/*
-TEST(Claster, can_create_claster_with_positive_size)
-{
-    ASSERT_NO_THROW(Claster X(4,10));
-}
-TEST(Claster, can_create_default_claster)
-{
-    ASSERT_NO_THROW(Claster X);
-}
-TEST(Claster, throws_when_create_claster_with_negative_size)
-{
-    ASSERT_ANY_THROW(Claster X(-4, 10));
-}
-TEST(Claster, throws_when_create_claster_with_too_big_size)
-{
-    ASSERT_ANY_THROW(Claster X(5, 10));
-}
-TEST(Claster, can_create_copied_claster)
-{
-    Claster m;
-    ASSERT_NO_THROW(Claster m2(m));
-}
-TEST(Claster, can_get_size)
-{
-  Claster s(4, 10);
-  EXPECT_EQ(4, s.Getsize());
-}
-TEST(Claster, good)
-{
-    Claster s(4, 2);
-    s.model_start(10);
-}
-/*
-TEST(TVector, can_create_vector_with_positive_length)
-{
-  ASSERT_NO_THROW(TVector<int> v(5));
-}
 
-TEST(TVector, cant_create_too_large_vector)
+TEST(Polinom, can_create_polinom_with_positive_maxst)
 {
-  ASSERT_ANY_THROW(TVector<int> v(MAX_VECTOR_SIZE + 1));
+    ASSERT_NO_THROW(Polinom A("", 10));
 }
-
-TEST(TVector, throws_when_create_vector_with_negative_length)
+TEST(Polinom, can_copy_polinom)
 {
-  ASSERT_ANY_THROW(TVector<int> v(-5));
+    Polinom A("12x^4y^4z^6", 10);
+    Polinom B;
+    B = A;
+    EXPECT_EQ(" + 12.00x^4y^4z^6",B.Getpolinom());
 }
-
-TEST(TVector, throws_when_create_vector_with_negative_startindex)
+TEST(Polinom, can_sum_polinoms_with_equal_deqrees)
 {
-  ASSERT_ANY_THROW(TVector<int> v(5, -2));
+    Polinom A("78xy^6z^5");
+    Polinom B("72xy^6z^5");
+    Polinom C;
+    C = A + B;
+    EXPECT_EQ(C.Getpolinom(), " + 150.00xy^6z^5");
 }
-
-TEST(TVector, can_create_copied_vector)
+TEST(Polinom, can_sum_polinoms_with_not_equal_deqrees)
 {
-  TVector<int> v(10);
-
-  ASSERT_NO_THROW(TVector<int> v1(v));
+    Polinom A("78xy^6z^5");
+    Polinom B("72x^7yz^4");
+    Polinom C;
+    C = A + B;
+    EXPECT_EQ(C.Getpolinom(), " + 72.00x^7yz^4 + 78.00xy^6z^5");
 }
-
-TEST(TVector, copied_vector_is_equal_to_source_one)
+TEST(Polinom, can_sub_polinoms_with_equal_deqrees)
 {
-   TVector<int> v1;
-	for (int i = 0; i < v1.GetSize(); i++)
-		v1[i] = i;
-	TVector<int> v2(v1);
-	EXPECT_EQ(v1, v2);
+    Polinom A("78xy^6z^5");
+    Polinom B("72xy^6z^5");
+    Polinom C;
+    C = B - A;
+    EXPECT_EQ(C.Getpolinom(), " -6.00xy^6z^5");
 }
-
-TEST(TVector, copied_vector_has_its_own_memory)
+TEST(Polinom, can_sub_polinoms_with_not_equal_deqrees)
 {
-    TVector<double>tmp1;
-    TVector<double>tmp2(tmp1);
-    EXPECT_NE(&tmp1,&tmp2);
+    Polinom A("78xy^6z^5");
+    Polinom B("72x^7yz^4");
+    Polinom C;
+    C = B - A;
+    EXPECT_EQ(C.Getpolinom(), " + 72.00x^7yz^4 -78.00xy^6z^5");
 }
-
-TEST(TVector, can_get_size)
+TEST(Polinom, can_multiply_monoms__with_not_equal__deqrees)
 {
-  TVector<int> v(4);
-  EXPECT_EQ(4, v.GetSize());
+    Polinom A("10xyz");
+    Polinom B("20x^2y^2z^2");
+    Polinom C;
+    C = A * B;
+    EXPECT_EQ(C.Getpolinom(), " + 200.00x^3y^3z^3");
 }
-
-TEST(TVector, can_get_start_index)
+TEST(Polinom, return_zero_if_degree_of_composition_polinoms_more_nine)
 {
-  TVector<int> v(4, 2);
-
-  EXPECT_EQ(2, v.GetStartIndex());
+    Polinom A("10x^5y^4z^6");
+    Polinom B("20x^4y^6z^4");
+    Polinom C;
+    C = A*B;
+    EXPECT_EQ(C.Getpolinom(), "0");
 }
-
-TEST(TVector, can_set_and_get_element)
+TEST(Polinom, return_zero_if_subtract_the_same_polynomial_from_the_polynomial)
 {
-  TVector<int> v(4);
-  v[0] = 4;
-
-  EXPECT_EQ(4, v[0]);
+    Polinom A("17x^8y^6z^4");
+    Polinom B("17x^8y^6z^4");
+    Polinom C;
+    C = A - B;
+    EXPECT_EQ(C.Getpolinom(), "0");
 }
-
-TEST(TVector, throws_when_set_element_with_negative_index)
+TEST(Polinom, can_not_add_elements_with_zero_koef)
+{ 
+    Polinom A("17x^8y^6z^4+0x^4z^6y^8");
+    EXPECT_EQ(A.Getpolinom(), " + 17.00x^8y^6z^4");
+}
+TEST(Polinom, can_create_a_polynom_with_elements_in_different_order)
 {
-   TVector<int> v(4);
-   EXPECT_ANY_THROW(v[-1]);
+    Polinom A("17z^8x^6y^4+4z^4y^6x^8");
+    cout << A.Getpolinom() << endl;
+    EXPECT_EQ(A.Getpolinom(), " + 4.00x^8y^6z^4 + 17.00x^6y^4z^8");
 }
-
-TEST(TVector, throws_when_set_element_with_too_large_index)
+TEST(Polinom, can_multiply_polinoms__)
 {
-    TVector<int> v(4);
-    EXPECT_ANY_THROW(v[4]);
+    Polinom A("x+y");
+    Polinom B("x^5-x^4y+x^3y^2-x^2y^3+xy^4-y^5");
+    Polinom C = A * B;
+    cout << C.Getpolinom() << endl;
+    EXPECT_EQ(" + 1.00x^6 -1.00y^6", C.Getpolinom());
 }
-
-TEST(TVector, can_assign_vector_to_itself)
+TEST(Polinom, can_multiply_numbers_)
 {
-    TVector<int> v;
-    ASSERT_NO_THROW(v = v);
+    Polinom A("5");
+    Polinom B("4");
+    Polinom C = A * B;
+    cout << C.Getpolinom() << endl;
+    EXPECT_EQ(" + 20.00", C.Getpolinom());
 }
-
-TEST(TVector, can_assign_vectors_of_equal_size)
+TEST(Polinom, can_multiply_number_and_polinom_)
 {
-    TVector<int> v1(7);
-    TVector<int> v2(7);
-    EXPECT_EQ(v2.GetSize(), v1.GetSize());
-    for (int i = 0; i < v2.GetSize(); i++)
-    {
-        v2[i] = i;
-    }
-    EXPECT_EQ(v2, v1 = v2);
+    Polinom A("5");
+    Polinom B("x+4");
+    Polinom C = A * B;
+    cout << C.Getpolinom() << endl;
+    EXPECT_EQ(" + 5.00x + 20.00", C.Getpolinom());
 }
-
-TEST(TVector, assign_operator_change_vector_size)
+TEST(Polinom, can_multiply_polinom_plus_number_and_polinom_plus_number)
 {
-    TVector<int> v1(8);
-    TVector<int> v2(14);
-    EXPECT_NE(v2.GetSize(), v1.GetSize());
-    v1 = v2;
-    EXPECT_EQ(v1.GetSize(),14);
-    EXPECT_EQ(v1.GetSize(), v2.GetSize());
+    Polinom A("x+2");
+    Polinom B("x+2");
+    Polinom C = A * B;
+    cout << C.Getpolinom() << endl;
+    EXPECT_EQ(" + 1.00x^2 + 4.00x + 4.00", C.Getpolinom());
 }
-
-
-TEST(TVector, can_assign_vectors_of_different_size)
-{
-    TVector<int> v1(7);
-    TVector<int> v2(10);
-    EXPECT_NE(v2.GetSize(), v1.GetSize());
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i;
-    }
-    EXPECT_EQ(v1, v2 = v1);
-}
-
-TEST(TVector, compare_equal_vectors_return_true)
-{
-  TVector<int> v1;
-	for (int i = 0; i < v1.GetSize(); i++)
-	{
-		v1[i] = i;
-	}
-	TVector<int> v2(v1);
-	EXPECT_EQ(true, v1 == v2);
-}
-
-TEST(TVector, compare_vector_with_itself_return_true)
-{
-    TVector<int> v1;
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i;
-    }
-    EXPECT_EQ(true, v1 == v1);
-}
-
-TEST(TVector, vectors_with_different_size_are_not_equal)
-{
-    TVector<int> v1(8);
-    TVector<int> v2(21);
-    EXPECT_NE(v2.GetSize(), v1.GetSize());
-    EXPECT_EQ(true, v1 != v2);
-}
-
-TEST(TVector, can_add_scalar_to_vector)
-{
-    TVector<int> v1(8);
-    TVector<int> v2(8);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i + 17;
-        v2[i] = i;
-    }
-    EXPECT_EQ(v1, v2 + 17);
-}
-
-TEST(TVector, can_subtract_scalar_from_vector)
-{
-    TVector<int> v1(8);
-    TVector<int> v2(8);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i - 17;
-        v2[i] = i;
-    }
-    EXPECT_EQ(v1, v2 - 17);
-}
-
-TEST(TVector, can_multiply_scalar_by_vector)
-{
-    TVector<int> v1(8);
-    TVector<int> v2(8);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 17;
-        v2[i] = i;
-    }
-    EXPECT_EQ(v1, v2 * 17);
-}
-
-TEST(TVector, can_add_vectors_with_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(56);
-    TVector<int> v3(56);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 19;
-        v2[i] = i + 19;
-        v3[i]= (i * 19)+(i + 19);
-    }
-    EXPECT_EQ(v3, v1 + v2);
-}
-
-TEST(TVector, cant_add_vectors_with_not_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(34);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 19;
-    }
-    for (int i = 0; i < v2.GetSize(); i++)
-    {
-        v2[i] = i + 19;
-    }
-    ASSERT_ANY_THROW(v1 + v2);
-}
-
-TEST(TVector, can_subtract_vectors_with_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(56);
-    TVector<int> v3(56);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 19;
-        v2[i] = i + 19;
-        v3[i] = (i * 19) - (i + 19);
-    }
-    EXPECT_EQ(v3, v1 - v2);
-}
-
-TEST(TVector, cant_subtract_vectors_with_not_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(34);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 19;
-    }
-    for (int i = 0; i < v2.GetSize(); i++)
-    {
-        v2[i] = i + 19;
-    }
-    ASSERT_ANY_THROW(v1 - v2);
-}
-
-TEST(TVector, can_multiply_vectors_with_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(56);
-    int s=0;
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i + 4;
-        v2[i] = i - 4;
-        s+= (i + 4) * (i - 4);
-    }
-    EXPECT_EQ(s, v1 * v2);
-}
-
-TEST(TVector, cant_multiply_vectors_with_not_equal_size)
-{
-    TVector<int> v1(56);
-    TVector<int> v2(34);
-    for (int i = 0; i < v1.GetSize(); i++)
-    {
-        v1[i] = i * 19;
-    }
-    for (int i = 0; i < v2.GetSize(); i++)
-    {
-        v2[i] = i + 19;
-    }
-    ASSERT_ANY_THROW(v1 * v2);
-}
-
-*/

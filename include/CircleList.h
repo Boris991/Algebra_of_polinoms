@@ -21,8 +21,12 @@ public:
 		delete first;
 		first = nullptr;
 	};
-	void AddMonom(float koef = 0.0, int sv = -1)
+	void AddMonom(float koef, int sv)
 	{
+		if (sv < 0)
+		{
+			throw "uncorrect_sv_of_monom";
+		}
 		Monom* tmp;
 		tmp = new Monom(koef, sv);
 		Monom* prev = first;
@@ -35,7 +39,7 @@ public:
 		float a = tmp->Getkoef() + cur->Getkoef();
 		if (tmp->Getsv() == cur->Getsv())
 		{
-			if (a != 0)
+			if (a != 0.00)
 			{
 				cur->Setkoef(a);
 			}
@@ -48,8 +52,16 @@ public:
 		}
 		else
 		{
-			tmp->SetNext(cur);
-			prev->SetNext(tmp);
+			if (tmp->Getkoef()!= 0.00)
+			{
+				tmp->SetNext(cur);
+				prev->SetNext(tmp);
+			}
+			else
+			{
+				delete tmp;
+				tmp = nullptr;
+			}
 			prev = nullptr;
 			cur = nullptr;
 		}
@@ -57,7 +69,7 @@ public:
 	void AddMonom(Monom mn)
 	{
 		AddMonom(mn.Getkoef(), mn.Getsv());
-	}	
+	}
 	CircleList operator+ (CircleList tmp)
 	{
 		CircleList res(tmp);
@@ -87,7 +99,7 @@ public:
 			while (curb != tmp.first)
 			{
 				curres = cura->multiply(*curb, Maxst);
-				if (curres.Getsv() != -1)
+				if (curres.Getsv() >= 0)
 				{
 					res.AddMonom(curres.Getkoef(), curres.Getsv());
 				}
@@ -145,6 +157,30 @@ public:
 		}
 		return *this;
 	}
-	string Getpolinom(int Maxst = 10);
+	string Getpolinom(int Maxst = 10)
+	{
+		string str = "";
+		Monom* cur = first->GetNext();
+		while (cur != first)
+		{
+			string m = cur->GetMonom(Maxst);
+			if (m[0] == '-')
+			{
+				str = str + " " + m;
+
+			}
+			else
+			{
+				str = str + " + " + m;
+			}
+
+			cur = cur->GetNext();
+		}
+		if (str == "")
+		{
+			str = "0";
+		}
+		return str;
+	}
 };
 

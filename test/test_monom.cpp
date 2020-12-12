@@ -78,4 +78,28 @@ TEST(Monom, can_not_have_negative_degree_of_z)
     Monom A(4, -144);
     ASSERT_ANY_THROW(A.pvz(10));
 }
-
+TEST(Monom, can_have_result_)
+{
+    Monom a(7, 100);
+    EXPECT_EQ(49, a.result(7, 0, 0));
+}
+TEST(Monom, can_have_result_with_zero_x_y_z)
+{
+    Monom a(7, 147);
+    EXPECT_EQ(0, a.result(0, 0, 0));
+}
+TEST(Monom, can_have_result_with_not_zero_x_y_z)
+{
+    Monom c("xyz");
+    EXPECT_EQ(1, c.result(1, 1, 1));
+}
+TEST(Monom, can_have_result_with_zero_koef)
+{
+    Monom c(0,179);
+    EXPECT_EQ(0, c.result(1, 4, 0));
+}
+TEST(Monom, can_have_result_with_negative_koef)
+{
+    Monom c(-10, 139);
+    EXPECT_EQ(-640, c.result(1, 4, 1));
+}

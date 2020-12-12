@@ -25,7 +25,6 @@ TEST(CircleList, can_add_monom_with_max_koef)
     CircleList A;
     Monom m(4, 999);
     A.AddMonom(m);
-    cout << A.Getpolinom() << endl;
     EXPECT_EQ(A.Getpolinom(), " + 4.00x^9y^9z^9");
 }
 TEST(CircleList, can_not_add__monom_with_negative_degree_to__polinom)
@@ -119,5 +118,32 @@ TEST(CircleList, return_zero_if_subtract_the_same_polynomial_from_the_polynomial
     CircleList C;
     C = A - B;
     EXPECT_EQ(C.Getpolinom(), "0");
+}
+TEST(CircleList, can_get_result_polinom_with_positive_koefs)
+{
+    CircleList A;
+    Monom m(4, 555);
+    Monom m2(5, 666);
+    A.AddMonom(m);
+    A.AddMonom(m2);
+    EXPECT_EQ(A.GetResultPolinom(1, 1, 1), 9);
+}
+TEST(CircleList, can_get_result_polinom_with_negative_koefs)
+{
+    CircleList A;
+    Monom m(-4, 555);
+    Monom m2(-5, 666);
+    A.AddMonom(m);
+    A.AddMonom(m2);
+    EXPECT_EQ(A.GetResultPolinom(1, 1, 1), -9);
+}
+TEST(CircleList, can_get_result_polinom_with_zero_koefs)
+{
+    CircleList A;
+    Monom m(0, 555);
+    Monom m2(0, 666);
+    A.AddMonom(m);
+    A.AddMonom(m2);
+    EXPECT_EQ(A.GetResultPolinom(144, 225, 369), 0);
 }
 

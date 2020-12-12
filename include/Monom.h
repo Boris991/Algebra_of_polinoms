@@ -195,5 +195,9 @@ public:
 		}
 		return newsv;
 	}
+	float result(float x_, float y_, float z_,int Maxst = 10)
+	{
+			return koef * powf(x_, pvx(Maxst)) * powf(y_, pvy(Maxst)) * powf(z_, pvz(Maxst));
+	}
 };
 #endif

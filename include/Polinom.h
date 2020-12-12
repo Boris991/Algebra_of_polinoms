@@ -66,6 +66,21 @@ public:
         }
         return res;
     }
+    bool operator==(Polinom& tmp)
+    {
+        if (sp == tmp.sp)
+            return 1;
+        else
+            return 0;
+    }
+    bool operator!=(Polinom& tmp)
+    {
+        return (!(*this == tmp));
+    }
+    float GetResult(float x_,float y_,float z_)
+    {
+        return sp.GetResultPolinom(x_, y_, z_);
+    }
     string Getpolinom()
     {
         return sp.Getpolinom(Maxst);
@@ -103,7 +118,6 @@ public:
                         k++;
                     }
                     w[k] = str[i];
-                    //w[++k] = "";
                 }
             }
         }
